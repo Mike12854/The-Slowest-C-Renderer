@@ -229,7 +229,7 @@ class Program
         var options = WindowOptions.DefaultVulkan with
         {
             Size = new Vector2D<int>(720, 480),
-            Title = "FreshRender Sandbox (Silk.NET Vulkan 1.3)",
+            Title = "Slowest C# Renderer in the World - Sandbox (Silk.NET Vulkan 1.3)",
             ShouldSwapAutomatically = false,
             VSync = false,
             FramesPerSecond = 0,
