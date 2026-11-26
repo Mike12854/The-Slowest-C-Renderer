@@ -563,8 +563,13 @@ class Program
                 var frameCommands = commandArray.AsSpan(0, totalCommands);
                 int cmdIdx = 0;
 
+                uint baseInstancesPerDraw = (uint)(instanceCount / drawCallCount);
+                uint remainder = (uint)(instanceCount % drawCallCount);
+                uint currentStartInstance = 0;
+                
                 for (int i = 0; i < drawCallCount; i++)
                 {
+                    uint countForThisDraw = baseInstancesPerDraw + (i < remainder ? 1u : 0u);
                     ulong baseKey = (ulong)i << 8;
 
                     frameCommands[cmdIdx++] = new StRenderCommand { SortKey = baseKey | 0, Type = ERenderCommandType.SetPipeline, Pipeline = pipeline };
@@ -578,9 +583,10 @@ class Program
                         Type = ERenderCommandType.DrawMesh,
                         Mesh = cubeMesh,
                         IndexCount = 36,
-                        InstanceCount = instancesPerDraw,
-                        StartInstance = (uint)i * instancesPerDraw
+                        InstanceCount = countForThisDraw,
+                        StartInstance = currentStartInstance
                     };
+                    currentStartInstance += countForThisDraw;
                 }
 
                 // 4. Hauptszene mit Schatten in das Offscreen-Target rendern
